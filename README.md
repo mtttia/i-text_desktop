@@ -1,10 +1,16 @@
 # i-text_desktop
 desktop app for interactive text, a superset notepad
 
+# come eseguirlo?
+  - Per eseguirlo bisogna avere installato node js.
+  - portarsi col prompt dei comandi nella cartella dell'app
+  - Digitare npm install dal prompt dei comandi per installare tutte le dipendenze necessarie all'esecuzione dell'app.
+  - Digitare npm start per avviare l'app
+
 # comandi da terminale
   - npm install : per installare le dipendenze
   - npm run start : per debuggare
-  - per impacchettare l'app : aggiungere alla fine del progetto --electronVersion=//versione corrente di electron installato nel tuo computer
+  - per impacchettare l'app : aggiungere alla fine del comando package-... --electronVersion=//versione corrente di electron installato nel tuo computer
   - npm run package-win : per impacchettare l'app per windows
   - npm run package-mac : per impacchettare l'app per Macos
   - npm run package-linux : per impacchettare l'app per linux
