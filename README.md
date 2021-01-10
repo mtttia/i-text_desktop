@@ -2,6 +2,7 @@
 desktop app for interactive text, a superset notepad
 
 # comandi da terminale
+  - npm install : per installare le dipendenze
   - npm run start : per debuggare
   - npm run package-win : per impacchettare l'app per windows
   - npm run package-mac : per impacchettare l'app per Macos
