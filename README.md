@@ -6,6 +6,7 @@ desktop app for interactive text, a superset notepad
   - portarsi col prompt dei comandi nella cartella dell'app
   - Digitare npm install dal prompt dei comandi per installare tutte le dipendenze necessarie all'esecuzione dell'app.
   - Digitare npm start per avviare l'app
+  - Se si riscontrano problemi durante l'avvio dell'app installare electron con l'npm nel progetto (https://www.electronjs.org/)
 
 # comandi da terminale
   - npm install : per installare le dipendenze
