@@ -1,5 +1,5 @@
 # i-text_desktop
-desktop app for interactive text, a superset notepad
+desktop app for interactive text, a superset notepad made with electron js
 
 # come eseguirlo?
   - Per eseguirlo bisogna avere installato node js.
@@ -30,7 +30,18 @@ Ad ogni modifica effettuata i-text salva tutti i testi su un file json che verr�
 I-text ti permette di leggere tutti i testi ad alta voce, consentendo di regolare la velocità e di regolare la lingua (per ora solo italiano e inglese)
 
 # ordinamento / formattazione del testo
-I-text contiene uno script che permette in tempo reale di aggingere spazi in caso di dimenticanza dell'utente ad esempio dopo una ',', oppure di mettere la lettera maiuscola dopo i '.'
+ordina in automatico il testo in tempo reale, inserisce lo spazio dopo i caratteri che la necessano (per ora sono supportati ', . : ? !'), le maiuscole dopo i punti (per ora sono supportati . ? !), e cancella punteggiature o spazi doppi, consente di creare elenchi e inserisce le frecce (per ora sono supportati ->, <-, =>, <=).
+Dalle impostazioni si possono scegliere quali opzioni usare e quali disattivare
+
+# versione 1.0.0
+  - salva i file in automatico, perciò non c'è il bisogno di salvarli ogni volta prima di chiudere l'app
+  - consente di leggere in italiano o in inglese il testo di qualsiasi file, a velocità 1x, 2x e 0.5x
+  - ordina in automatico il testo in tempo reale, inserisce lo spazio dopo la ',' o le maiuscole dopo il '.', e cancella punteggiature o spazi doppi, consente di creare elenchi
+  - consente di aprire file dal file-system (per è supportato ufficialmente solo il formato txt, pertanto aprirà tutti i file come file di testo)
+  - consente di salvare i file con nome o di sovrascrivere il file originale
+  - consente di modificare la grandezza del carattere e l'ordinamento
+  
+l'app è in continuo sviluppamento, questa è soltanto la prima versione, ma sono in arrivo moltissime novità : dall'aggiunta di nuove opzioni di formattazione, all'aggiunta di nuove lingue, nuovi script per interagire il più possibile col file system e nuovi tool / utilities per avere il 100% dal tuo notepad. NON PERDERTELE!
 
 # tecnologie utilizzate
 Per realizzare quest'app è stato utilizzato node js con electron js.
