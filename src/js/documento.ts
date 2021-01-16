@@ -1,17 +1,23 @@
+
 const fs = require('fs'); 
 const path = require('path');
+
+
 //oggetto setting
-var setting = {
+let setting = {
     schermoIntero : false,
     ordinaTesto : true,
+    spellcheck : true,
     cancellaDoppie : true,
     capsDopoPunto : true,
     cancellaDoppioSpazio : true,
-    chiudiParentesiConDoppioSpazio : true,
+    chiusuraParentesiAutomatica : true,
     grandezzaTesto : 15,
     orientamento : "sinistra",
     velocitaLettura : 1,
-    linguaLettura : "it-IT"
+    linguaLettura : "it-IT",
+    backgroundColor : "#ffffff",
+    color : "#707070"
 }
 
 
@@ -44,6 +50,20 @@ $(document).ready(() =>{
     }
     
 
+    //metodi per il fastmenu
+    $('#char_plus').click(()=>{
+        incrementsFontSise('chooseSize', 1);
+    })
+    $('#char_minus').click(()=>{
+        decrementsFontSise('chooseSize', 1);
+    })
+    $('#lightmode').click(()=>{
+        lightmode();
+    })
+    $('#darkmode').click(()=>{
+        darkmode();
+    })
+
 
     //metodi delle impostazioni del Dom
     //IMPOSTAZIONI DI ORDINE
@@ -63,8 +83,8 @@ $(document).ready(() =>{
         salvaSetting();
     })
 
-    $("#chiudiParentesiConDoppioSpazio").change(function(){
-        setting.chiudiParentesiConDoppioSpazio = $("#chiudiParentesiConDoppioSpazio").is(":checked");
+    $("#chiusuraParentesiAutomatica").change(function(){
+        setting.chiusuraParentesiAutomatica = $("#chiusuraParentesiAutomatica").is(":checked");
         salvaSetting();
     })
 
@@ -82,12 +102,15 @@ $(document).ready(() =>{
         lettore.velocita = <number> $("#velocitaLettura").val();
         setting.velocitaLettura = lettore.velocita;
         salvaSetting();
+
+        
     })
 
     $("#linguaLettura").change(() => {
         lettore.lang = <string> $("#linguaLettura").val();
         setting.linguaLettura = lettore.lang;
         salvaSetting();
+
     })
 
     //Impostazioni visualizzazione schermata
@@ -100,13 +123,19 @@ $(document).ready(() =>{
 
     //ordina testo
     $("#b_ordinaTesto").change(() => {
-        var attivo = $("#b_ordinaTesto").is(":checked");
+        let attivo = $("#b_ordinaTesto").is(":checked");
         cambiaOrdinaTesto(attivo);
     });
     $("#m_ordinaTesto").change(() => {
-        var attivo = $("#m_ordinaTesto").is(":checked");
+        let attivo = $("#m_ordinaTesto").is(":checked");
         cambiaOrdinaTesto(attivo);
     });
+    $('#spellcheck').change(()=>{
+        let attivo = $('#spellcheck').is(':checked');
+        setting.spellcheck = attivo;
+        document.getElementById('text').setAttribute('spellcheck', setting.spellcheck.toString());
+        salvaSetting();
+    })
     function cambiaOrdinaTesto(attivo : boolean)
     {
         setting.ordinaTesto = attivo;
@@ -143,9 +172,9 @@ $(document).ready(() =>{
     
 
 
-    $("#text").keypress(function(){
-        //var key = <number> window.event.keyCode;
-        //change(key);
+    $("#text").keyup(function(){
+        let key = <number> window.event.keyCode;
+        change(key);
     });
 
     document.getElementById("text").addEventListener("keypress", function(){
@@ -585,8 +614,6 @@ var elencoChar = "-";
 //var cancellaDoppie = true;
 //var capsDopoPunto = true;
 var chiusuraElementiAutomatica = true;
-//var chiudiParentesiConDoppioSpazio = true;
-var numeroParentesiAperte = 0;
 //var cancellaDoppioSpazio = true;
 var caps = false;
 var elenco = false;
@@ -618,7 +645,6 @@ function change(keyPressed : number)
 {    
     if(ordinaTesto)
     {
-        console.log("correggo");
     //console.log(keyPressed);    
     var t = <string> $("#text").val();
     libreria.aggiornaTesto();
@@ -628,7 +654,9 @@ function change(keyPressed : number)
         proxTrattino = false;
     }
     //console.log(t[t.length-1] + ", stringa -> " + t + ", lunghezza -> " + t.length);
-    if(t.length > 1)
+    
+    getCursor('#text');
+    if(t.length > 1 && keyPressed != 8 && !(keyPressed >= 37 && keyPressed <= 40) && !isCursorInText())//se cancello non modifico niente
     {
         switch(t[t.length-1]){
             case ',':
@@ -645,7 +673,7 @@ function change(keyPressed : number)
                 text(GetSubstring(t) + duePunti);            
                 if(setting.cancellaDoppie)
                 {
-                    if(t[t.length-3] == ':')
+                    if(getCharByCursor(t, 3) == ':')
                     {
                         text(GetSubstring(t, 1))
                     }
@@ -684,16 +712,6 @@ function change(keyPressed : number)
                     $("#btnChiudiList").removeClass("invisible");
                     text(GetSubstring(t, 2) + "   -  ");
                 }
-                if(setting.chiudiParentesiConDoppioSpazio && numeroParentesiAperte >= 1)
-                {
-                    //c'è una parentesi da chiudere
-                    if(t[t.length - 2] == " ")
-                    {
-                        //chiudo la parentesi
-                        text(GetSubstring(t, 2) + ") ");
-                        numeroParentesiAperte--;
-                    }
-                }
                 else
                 {
                     if(setting.cancellaDoppioSpazio)
@@ -707,10 +725,27 @@ function change(keyPressed : number)
                 
                 break;
             case '(':
-                numeroParentesiAperte++;
+                if(setting.chiusuraParentesiAutomatica)
+                {
+                    text(t + ')');
+                    moveCursor('text', 1);
+                }
                 break;
-            case ')':
-                numeroParentesiAperte--;
+            case '[':
+                if(setting.chiusuraParentesiAutomatica)
+                {
+                    text(t + ']');
+                    moveCursor('text', 1);
+                }
+                break;
+            case '{':
+                if(setting.chiusuraParentesiAutomatica)
+                {
+                    text(t + '}');
+                    moveCursor('text', 1);
+                }
+                break;
+
         }
     }
     if(t.length == 1)
@@ -727,6 +762,7 @@ function change(keyPressed : number)
             possibileElenco = true;
         }
     }
+    
     if(caps)
     {        
         var codice = lastChar(t).charCodeAt(0);
@@ -746,7 +782,62 @@ function change(keyPressed : number)
     }
 }
 
+function isCursorInText()
+{
+    //dice se il cursore è all'interno del testo, in quel caso non si fa niente
+    let t = <string>$('#text').val();
+    if(getCursor('#text') < t.length)
+        return true;
+    return false;
+}
     
+function moveCursor(id : string, fromEnd : number)
+{
+	let el = <HTMLElement>document.getElementById(id);
+	el.focus()
+	{
+		let end = el.selectionEnd;
+		el.selectionEnd = end - fromEnd;
+		
+	}
+}
+
+function setCursos(id : string, pos : number)
+{
+    let el = <HTMLElement>document.getElementById(id);
+	el.focus()
+	{
+		//let end = el.selectionEnd;
+		el.selectionEnd = pos;
+		
+	}
+}
+
+function getCharByCursor(t:string, minus : number = 1)
+{
+    return t[getCursor('#text') - minus];
+}
+
+function write(t : string, toAdd : string, sub : number = 0 )
+{
+    //non funziona bene (cavato dal codice)
+    console.log('testo : ', t);
+    let cursorPosition = getCursor('#text') - 1;
+    console.log("posizione del cursore : ", cursorPosition, ", lunghezza testo : " + t.length);
+    let sub1 = t.substr(0, cursorPosition - sub);
+    let sub2 = t.substr(cursorPosition + 1, t.length);
+    console.log('sub : ' + toAdd + ', sub1 : ' + sub1 + ', sub2 : ' + sub2);
+    sub1 += toAdd;
+    let t1 = sub1 + sub2;
+    text(t1);
+    setCursos('#text', getCursor('#text') + 1);
+}
+
+function getCursor(id : string) : number
+{
+    let cursorPosition = $(id).prop("selectionEnd");
+    return cursorPosition;
+}
 
 
 function GetSubstring(t : string, fine = 1)
@@ -764,6 +855,11 @@ function text(text : string)
     $("#text").val(text);
 }
 
+function formattaTutto()
+{
+    const testo = <string>$('#text').val();
+    $('#text').val(formattaTesto(testo));
+}
 
 
 var correggiVirgole = true;
@@ -878,7 +974,7 @@ function formattaTesto(t : string)
             }
         }
     }
-    text(t);
+    return t;
 }
 
 function AggiungiStringAt(stringa : string, stringaDaAggiungere : string, indice : number)
@@ -986,23 +1082,31 @@ function caricaSetting()
     console.log(setting.ordinaTesto.toString());
     document.getElementById("m_ordinaTesto").checked = setting.ordinaTesto;
     document.getElementById("container").checked = !setting.schermoIntero;
+    document.getElementById('spellcheck').checked = setting.spellcheck;
     if(setting.schermoIntero)
     {
         $("#home").toggleClass("container");
         $("#home").toggleClass("container-fluid");
     }
+    document.getElementById('text').setAttribute('spellcheck', setting.spellcheck.toString());
 
     //ordine    
     document.getElementById("cancellaDoppie").checked = setting.cancellaDoppie;
     document.getElementById("capsDopoPunto").checked = setting.capsDopoPunto;
     document.getElementById("cancellaDoppiSpazi").checked = setting.cancellaDoppioSpazio;
-    document.getElementById("chiudiParentesiConDoppioSpazio").checked = setting.chiudiParentesiConDoppioSpazio;
+    document.getElementById("chiusuraParentesiAutomatica").checked = setting.chiusuraParentesiAutomatica;
 
     //formattazione
     $("#chooseSize").val(setting.grandezzaTesto);
     $("#lblCarattere").text(setting.grandezzaTesto + " px");
     $("#text").css("font-size", setting.grandezzaTesto + "px");
     $("#lblCarattere").text(setting.grandezzaTesto);
+
+    //grafica text    
+    $('#text').css({
+        'background-color' : setting.backgroundColor,
+        'color' : setting.color
+    })
 
 
     //generali
@@ -1066,9 +1170,9 @@ function correggiFile()
 //Interazioni con main.js
 
 
-function getFileCorr()
+function getFileCorr() : object
 {
-    var obj = {
+    let obj = {
         titolo : libreria.getTesto().titolo,
         testo : libreria.getTesto().getText(),
         isFile : libreria.getTesto().isFile(),
@@ -1076,6 +1180,22 @@ function getFileCorr()
     }
     
     return obj;
+}
+
+function getAllFile() : object[]
+{
+    let lst = new Array();
+    libreria.getTesti().forEach(el =>{
+        let obj = {
+            titolo : el.titolo,
+            testo : el.getText(),
+            isFile : el.isFile(),
+            path : el.getPath()
+        }
+        lst.push(obj);
+    });
+
+    return lst;
 }
 
 function makeTestoAsFile(path : string)
@@ -1112,3 +1232,167 @@ return n;
 
 //====================================================================================================
 //TODO : shortcut da tastiera - ctrl+
+
+
+//====================================================================================================
+//faststyle method
+let theText = <HTMLElement>document.getElementById('text');
+let fastmenuOpen = false;
+
+function showFastmenu()
+{
+    if(fastmenuOpen)
+    {
+        //lo chiudo
+        
+        $('.fastmenu').addClass('fastmenu-no');
+        theText.style.paddingRight = '0px';        
+    }
+    else
+    {
+        
+        $('.fastmenu').removeClass('fastmenu-no');
+        theText.style.paddingRight = '120px';  
+    }
+    fastmenuOpen = !fastmenuOpen;
+
+}
+
+function incrementsFontSise(fontElement : string, toAdd : number = 1)
+{
+    /// <summary>
+    /// increment text fonts df = 1
+    /// </summary>
+
+    
+    const fontActualSize = <number>$('#' + fontElement).val();
+    if(fontActualSize <= 100)
+    {
+        console.log(fontElement + ', val : ' + fontActualSize);
+        let fontSize = fontActualSize*1 + toAdd*1;
+        console.log('new font size : ' + fontSize);
+        
+        theText.style.fontSize = fontSize + 'px';
+        $('#'+fontElement).val(fontSize);
+        $('#lblCarattere').text(fontSize);
+        setting.grandezzaTesto = fontSize;
+        salvaSetting();
+    }
+    }
+
+function decrementsFontSise(fontElement : string, toRemove = 1)
+{
+    /// <summary>
+    /// decrement text fonts df = 1
+    /// </summary>
+
+    toRemove *= -1;
+    const fontActualSize = <number>$('#' + fontElement).val();
+    if(fontActualSize >= 5)
+    {
+        console.log(fontElement + ', val : ' + fontActualSize);
+        let fontSize = fontActualSize*1 + toRemove*1;
+        console.log('new font size : ' + fontSize);
+        
+        theText.style.fontSize = fontSize + 'px';
+        $('#'+fontElement).val(fontSize);
+        $('#lblCarattere').text(fontSize);
+        setting.grandezzaTesto = fontSize;
+        salvaSetting();
+    }
+}
+
+function changeFontColor(colorPicker : string, ...toUpdate : string[])
+{
+    /// <summary>
+    /// change font color
+    /// </summary>
+
+    const cp = <HTMLElement>document.getElementById(colorPicker);
+
+    let bgC = cp.value;
+    theText.style.color = bgC;
+
+    for(let i = 0; i < toUpdate.length; i++)
+    {
+        let el = <HTMLElement>document.getElementById(toUpdate[i]);
+        el.value = bgC;
+    }
+}
+
+function changeBgColor(colorPicker : string, ...toUpdate : string[])
+{
+    /// <summary>
+    /// change background Color
+    /// </summary>
+
+    const cp = <HTMLElement>document.getElementById(colorPicker);
+    
+
+    let bgC = cp.value;
+    theText.style.backgroundColor = bgC;
+
+    for(let i = 0; i < toUpdate.length; i++)
+    {
+        let el = <HTMLElement>document.getElementById(toUpdate[i]);
+        el.value = bgC;
+    }
+}
+
+function lightmode()
+{//colorPickerFont : string, colorPickerBackground : string, toUpdateFont : string, toUpdateBg:string
+    /// <summary>
+    /// set text to lightmode
+    /// </summary>
+/*
+    let cpF = <HTMLElement>document.getElementById(colorPickerFont);
+    let cpB = <HTMLElement>document.getElementById(colorPickerBackground);
+    const toUpF = <HTMLElement>document.getElementById(toUpdateFont);
+    const toUpB = <HTMLElement>document.getElementById(toUpdateBg);
+*/
+    const font = '#707070';
+    const back = '#ffffff';
+/*
+    cpF.value = font;
+    cpB.value = back;
+*/
+    theText.style.backgroundColor = back;
+    theText.style.color = font;
+/*
+    toUpF.value = font;
+    toUpB.value = back;
+    */
+    setting.backgroundColor = back;
+    setting.color = font;
+    salvaSetting();
+}
+
+function darkmode()
+{//colorPickerFont : string, colorPickerBackground : string, toUpdateFont : string, toUpdateBg:string
+    /// <summary>
+    /// set text to darkmode
+    /// font cdcdcd
+    /// back 343434
+    /// </summary>
+/*
+    let cpF = <HTMLElement>document.getElementById(colorPickerFont);
+    let cpB = <HTMLElement>document.getElementById(colorPickerBackground);
+    const toUpF = <HTMLElement>document.getElementById(toUpdateFont);
+    const toUpB = <HTMLElement>document.getElementById(toUpdateBg);
+*/
+    const font = '#dedede';
+    const back = '#343434';
+/*
+    cpF.value = font;
+    cpB.value = back;
+*/
+    theText.style.backgroundColor = back;
+    theText.style.color = font;
+/*
+    toUpF.value = font;
+    toUpB.value = back;
+*/
+    setting.backgroundColor = back;
+    setting.color = font;
+    salvaSetting();
+}

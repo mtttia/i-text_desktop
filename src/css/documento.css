@@ -158,11 +158,11 @@ body
     transition: all 0.3s ease;
     cursor: pointer;
     color: white;
-
+    border-radius: 50px;
 }
 .menu-item:hover
 {
-    border: 1px solid white;
+    /*border: 1px solid white;*/
 }
 
 .impostazioni-item
@@ -201,13 +201,14 @@ body
 
 .menu-icon
 {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
 }
 
 .menu-icon-item
 {
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     color: white;
     cursor: pointer;
     width: 60px;
@@ -255,12 +256,15 @@ body
     position: fixed;
     top: 48vh;
     right: 15px;
+    z-index: 3;
+    background-color: #2125296b;
 }
 
 .p_icon
 {
     width: 40px;
     height: 40px;
+    border: 1px solid white;
 }
 
 .p_item
@@ -295,6 +299,77 @@ body
 
 .icon-right{
     margin-left: 250px;
+}
+/*fine menu*/
+/*fastmenu*/
+.fastmenu
+{
+    width: 100px;
+    height: 100%;
+    position: absolute;
+    top : 70px;
+    right: 0px;
+    background-color: #212529 !important;
+    color: white;
+    z-index: 2;
+    transition: all 0.3s ease;
+    overflow: auto;
+    cursor: pointer
+    ;
+}
+
+.fastmenu-no
+{
+    transform: translateX(110px);
+    display: none;
+}
+
+.fastmenu-caller
+{
+    width: auto;
+    height: 59px;
+    border-right: 1px solid #000000;
+    padding: 14px;
+    padding-top: 17px;
+    padding-right: 10px;
+    font-size: 19px;
+    color: #ffffff;
+    background-color: #212529;
+    float: left;
+    cursor: pointer;
+    z-index: 2;
+    position: absolute; top: 0px; right: 0px;
+}
+
+.fastmenu-caller:hover
+{
+    background-color: #ffffff54;
+}
+
+.fastmenu-item
+{
+    align-items: center;
+    height: 65px;
+    transition: all 0.2s ease;
+    margin-bottom: 10px;
+}
+
+.fastmenu-item:hover
+{
+    background-color: #08090a;
+}
+
+.fastmenu-text
+{
+
+}
+
+.fastmenu-icon
+{
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
 }
 
 .file-item

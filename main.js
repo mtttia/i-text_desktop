@@ -1,12 +1,13 @@
 const { app, BrowserWindow, Menu, dialog } = require('electron');
 const { valHooks } = require('jquery');
 const fs = require('fs');
+const path = require('path');
 
 
 
 function createWindow () {
   const win = new BrowserWindow({
-    minWidth : 640,
+    minWidth : 695,
     minHeight : 300,
     width: 800,
     height: 600,
@@ -26,28 +27,63 @@ function createWindow () {
       submenu: [
         {
           label: "Nuovo",
-          
+          accelerator : "CommandOrControl+N",
           click()
           {
             eseguijs(contents, "nuovoFile('', true)");
           }
         },
         {
-          label: "Apri",
+          label: "Apri file",
+          accelerator : "CommandOrControl+O",
           click(){
             apriFile(contents);
           }
         },
         {
+          label : "Apri cartella",
+          accelerator : "CommandOrControl+D",
+          click()
+          {
+            apriCartella(contents);
+          }
+        },
+        {
           label : "Salva file",
+          accelerator : "CommandOrControl+S",
           click(){
             salvaFile(contents);
           }
         },
         {
+          label: "salva tutti i file",
+          accelerator : "CommandOrControl+Alt+S",
+          click()
+          {
+            salvaTutti(contents);
+          }
+        },
+        {
           label: "Salva con nome",
+          accelerator : "CommandOrControl+Shift+S",
           click(){
             salvaConNome(contents);
+          }
+        }
+        
+      ]
+    },
+    {
+      label : "ordina",
+      submenu : [
+        {
+          label : "ordina tutto",
+          accelerator : "CommandOrControl+Shift+O",
+          click()
+          {
+            //lo eseguo due volte perchè a volte alla prima non sistema tutto
+            eseguijs(contents, "formattaTutto()");
+            eseguijs(contents, "formattaTutto()");
           }
         }
       ]
@@ -70,7 +106,7 @@ function createWindow () {
           }
         },
         {
-          label : "generali",
+          label : "lettura",
           click()
           {
             eseguijs(contents, "menu('generali')");
@@ -83,6 +119,7 @@ function createWindow () {
       submenu : [
         {
           label : "leggi",
+          accelerator : "CommandOrControl+Alt+R",
           click(){
             eseguijs(contents, "leggi()");
           }
@@ -243,3 +280,61 @@ function risolviPath(s)
     }
     return n;
   }
+
+function salvaTutti(cont)
+{
+  var t = cont.executeJavaScript("getAllFile()");
+  t.then(function(result){
+    //console.log(result);
+    var testi = result; //testi è un array di object
+    console.log(testi);
+    testi.forEach(testo => {
+      if(testo.isFile)
+      {
+        //è un file devo solo salvarlo e quindi sovrascriverlo
+        fs.writeFileSync(testo.path, testo.testo);
+      }
+    });
+
+    
+  });
+}
+
+function apriCartella(cont, win)
+{
+  let files = dialog.showOpenDialogSync(win, {
+    properties : [
+      'openDirectory'
+    ]
+  })
+
+  if(!files) return;
+  
+  let pathDir = files[0];
+  
+  fs.readdir(pathDir, 'utf-8', (err, files)=>{
+    if(err) return console.log(err);
+    let allFile  = getFiles(files);
+    //li apro uno a uno
+    allFile.forEach(el =>{
+      el = pathDir + "\\" + el;
+      el = risolviPath(el);
+      cont.executeJavaScript("leggiFile(\"" + el +"\")");
+    })
+  })
+  
+  function getFiles(files)
+  {
+    //remove directory
+    let toRet = new Array();
+    files.forEach(el => {
+      if(path.extname(el) != '')
+      {
+        toRet.push(el);
+      }
+    });
+  
+    return toRet;
+  
+  }
+}
