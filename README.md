@@ -51,3 +51,4 @@ Come pacchetti npm sono stati utilizzati :
   - jquery
   - typescript
   - swiper.js
+  - electron-viewerjs

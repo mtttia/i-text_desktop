@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>render document</title>
+</head>
+<body>
+
+   <div id="sample-viewer-1" style="width: 100%; height: 100vh;" data-src=":/Users\\matti\\Desktop\\proxy.pdf">
+      <webview src="file:///C:/Users/matti/Desktop/i-text/i-text_desktop/node_modules/electron-viewerjs/ViewerJS/index.html#/C:/Users/matti/Desktop/proxy.pdf" style="width: 100%; height: 100%;" id="file">
+      </webview>
+   </div>
+
+
+   <script>
+      const path = require('path');
+      const pathViewer = path.join(__dirname, 'node_modules/electron-viewerjs/ViewerJS/index.html#');
+      const webV = document.getElementById('file');
+      function render(file)
+      {
+         let p = path.join(pathViewer, '/' + file);
+         console.log(p);
+         webV.setAttribute('src', p);
+      }
+   </script>
+   <!--
+   <div id="sample-viewer-1" style="width: 100%; height: 100%;" data-src="
+   /Users\\matti\\Desktop\\proxy.pdf"></div>
+   <script>
+      const viewer = require('electron-viewerjs');
+      let ctx = document.getElementById('sample-viewer-1');
+      viewer.new(ctx);
+      
+   </script>
+-->
+</body>
+</html>

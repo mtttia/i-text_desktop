@@ -2,6 +2,7 @@ const { app, BrowserWindow, Menu, dialog } = require('electron');
 const { valHooks } = require('jquery');
 const fs = require('fs');
 const path = require('path');
+const { exception } = require('console');
 
 
 
@@ -197,8 +198,65 @@ function apriFile(cont, win)
 
   var file = files[0];
 
-  file = risolviPath(file);
-  cont.executeJavaScript("leggiFile(\"" + file +"\")");
+  let extension = path.extname(file);
+
+  console.log(extension);
+  if(extension == '.pdf' || extension == '.odt' || extension == '.odp') //estensioni supportate da  viewerjs
+  {
+    //apro il file in sola lettura con viewer js
+    //chiedo se vuole farlo
+    let risp = dialog.showMessageBoxSync(win, {
+      type : 'info',
+      buttons : ['no', 'si'],
+      title : 'anteprima documento disponibile',
+      message : 'il documento ' + file + ', è supportato per essere visualizzato in sola lettura, vuoi aprirlo?',
+
+    });
+    file = risolviPath(file);
+    switch(risp)
+    {
+      case 0:
+        //non aperto in lettura
+        
+        cont.executeJavaScript("leggiFile(\"" + file +"\")");
+        break;
+      case 1:
+        //apro il documento con viewer js
+        let newWin = new BrowserWindow({
+          minWidth : 695,
+          minHeight : 300,
+          width: 800,
+          height: 600,
+          webPreferences: {
+            nodeIntegration: true,
+            webviewTag: true //Enable webviewTag
+          }
+        });
+
+        newWin.webContents.toggleDevTools();
+        if(extension == '.pdf')
+        {
+          //chromium apre i pdf in automatico
+          newWin.loadFile(file);
+        }
+        else
+        {
+          newWin.loadFile('viewer.html');
+          const content = newWin.webContents;
+          content.on('did-finish-load', ()=>{
+            content.executeJavaScript("render('" + file + "')");
+          });
+        }
+        
+        break;
+    }
+  }
+  else
+  {
+    file = risolviPath(file);
+    cont.executeJavaScript("leggiFile(\"" + file +"\")");
+  }
+  
 
   
 }
