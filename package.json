@@ -1,7 +1,7 @@
 {
   "name": "i-text",
   "productName": "i-text",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "interactive text application, read, correct and take notes",
   "main": "src/index.js",
   "scripts": {
