@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="src/icon/logo_bg-black.png" rel="icon">
+
+    <!-- Bootstrap CSS -->
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../node_modules/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="src/css/style.css" rel="stylesheet">
+    <link href="src/css/documento.css" rel="stylesheet">
+
+    <title>interactive-text</title>
+  </head>
+  <body>
+   
+
+    <div class="actions bg-dark">
+      <div class="action-item" id="impostazioni">
+        <p class="non-selezionabile"><svg viewBox="0 0 16 16" class="bi bi-gear-wide-connected action-icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M8.932.727c-.243-.97-1.62-.97-1.864 0l-.071.286a.96.96 0 0 1-1.622.434l-.205-.211c-.695-.719-1.888-.03-1.613.931l.08.284a.96.96 0 0 1-1.186 1.187l-.284-.081c-.96-.275-1.65.918-.931 1.613l.211.205a.96.96 0 0 1-.434 1.622l-.286.071c-.97.243-.97 1.62 0 1.864l.286.071a.96.96 0 0 1 .434 1.622l-.211.205c-.719.695-.03 1.888.931 1.613l.284-.08a.96.96 0 0 1 1.187 1.187l-.081.283c-.275.96.918 1.65 1.613.931l.205-.211a.96.96 0 0 1 1.622.434l.071.286c.243.97 1.62.97 1.864 0l.071-.286a.96.96 0 0 1 1.622-.434l.205.211c.695.719 1.888.03 1.613-.931l-.08-.284a.96.96 0 0 1 1.187-1.187l.283.081c.96.275 1.65-.918.931-1.613l-.211-.205a.96.96 0 0 1 .434-1.622l.286-.071c.97-.243.97-1.62 0-1.864l-.286-.071a.96.96 0 0 1-.434-1.622l.211-.205c.719-.695.03-1.888-.931-1.613l-.284.08a.96.96 0 0 1-1.187-1.186l.081-.284c.275-.96-.918-1.65-1.613-.931l-.205.211a.96.96 0 0 1-1.622-.434L8.932.727zM8 12.997a4.998 4.998 0 1 0 0-9.995 4.998 4.998 0 0 0 0 9.996z"/>
+          <path fill-rule="evenodd" d="M7.375 8L4.602 4.302l.8-.6L8.25 7.5h4.748v1H8.25L5.4 12.298l-.8-.6L7.376 8z"/>
+        </svg>   impostazioni</p>
+      </div>
+      <div class="action-item play" id="play">
+        <p class="non-selezionabile"><svg viewBox="0 0 16 16" class="bi bi-play-fill action-icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/>
+        </svg>   leggi</p>
+      </div>
+      <div class="action-item" id="nuovo">
+        <p class="non-selezionabile"><svg viewBox="0 0 16 16" class="bi bi-file-earmark-plus-fill action-icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7.5 1.5v-2l3 3h-2a1 1 0 0 1-1-1zM8.5 7a.5.5 0 0 0-1 0v1.5H6a.5.5 0 0 0 0 1h1.5V11a.5.5 0 0 0 1 0V9.5H10a.5.5 0 0 0 0-1H8.5V7z"/>
+        </svg>   nuovo file</p>
+      </div>
+    </div>
+
+    <div class="bg-dark">
+      <div class="files-container swiper-container" style="height: 35px;">
+        <div class="files-container swiper-wrapper" id="files">
+          <!--qui si aprono i file-->
+        </div>
+        <!-- Add Pagination -->
+        
+      </div>
+    </div>
+
+    <!--TEXT-->
+    <div class="container" id="home">
+      <textarea id="text" class="text" style="width: 100%; height: 100vh;" placeholder="Scrivi qui il tuo testo..."></textarea>
+    </div>
+    <div class="container margin-top" id="veloce" style="display: none;">
+      <!--modalità lettura veloce-->
+      <div class="row">
+        <button class="offset-1 col-4 btn btn-success btn-layout" id="partiVeloce">parti</button><!--diventa continua-->
+        <button class="offset-2 col-4 btn btn-danger btn-layout" id="stopVeloce">stop</button><!--diventa cancella-->
+        <p class="text-center margin-top text" id="textVeloce"></p>
+        <div id="chooseSpid" class="shadow p-3 layout center text-center margin-top">
+          scegli la velocità di scorrimento delle parole:   <input type="number" id="lblSpeed" value="500"> millisecondi
+          <button id="btnSpeed" class="btn btn-outline-layout">cambia</button>          
+        </div>
+        <div class="alert alert-success d-none" role="alert" id="alert-cambio-velocita">
+          velocità cambiata con successo
+        </div>
+        <div class="alert alert-danger d-none" role="alert" id="alert-cambio-velocita-danger">
+          velocità cambiata con successo
+        </div>
+      </div>
+    </div>
+
+    <!--MENU-->
+    
+        <!--impostazioni-->
+    
+        <div id="menu_impostazioni" class="menu menu-no menu-left">
+          <div class="menu-icon-item icon-right" onclick="menu('impostazioni')">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-x menu-icon" viewBox="0 0 16 16">
+              <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </div>
+          <hr class="menu-hr">
+          <div class="menu-item layout non-selezionabile" onclick="menu('impostazioni', 'ordine')">
+            ordine
+          </div>
+          <div class="menu-item layout non-selezionabile" onclick="menu('impostazioni', 'formattazione')">
+            formattazione
+          </div>
+          <div class="menu-item layout non-selezionabile" onclick="menu('impostazioni', 'generali')">
+            lettura
+          </div>
+          <hr class="menu-hr">
+          <div class="form-check form-switch switch-item " style="margin-left: 20px;">
+            <input class="form-check-input" type="checkbox" id="m_ordinaTesto" checked="true">
+            <label class="form-check-label non-selezionabile" for="m_ordinaTesto">ordina testo</label>
+          </div>
+          <div class="form-check form-switch switch-item " style="margin-left: 20px;">
+            <input class="form-check-input" type="checkbox" id="spellcheck" checked="true">
+            <label class="form-check-label non-selezionabile" for="spellcheck">segnala errori</label>
+          </div>
+          <div class="form-check form-switch switch-item " style="margin-left: 20px;">
+            <input class="form-check-input" type="checkbox" id="container" checked="true">
+            <label class="form-check-label non-selezionabile" for="container">spazio tra blocco note e margini</label>
+          </div>          
+        </div>
+        <div id="space_impostazioni" class="space d-none space-right" onclick="menu('impostazioni')" ></div>
+    
+    
+        <!--ordine-->
+        <div id="menu_ordine" class="menu menu-no menu-left">
+          <div class="row">
+            <div class="menu-icon-item arrow offset-6 col-3" onclick="menu('ordine', 'impostazioni')">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-right menu-icon" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+              </svg>
+            </div>
+            <div class="menu-icon-item arrow col-3" onclick="menu('ordine')" style="margin-left: 10px;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-x menu-icon" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </div>
+          </div>
+          <hr class="menu-hr">
+    
+          <div class="switch-item">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="cancellaDoppie" checked="true">
+              <label class="form-check-label" for="cancellaDoppie">cancella doppie</label>
+            </div>
+          </div>
+          <div class="switch-item">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="capsDopoPunto" checked="true">
+              <label class="form-check-label" for="capsDopoPunto">maiuscolo dopo punto</label>
+            </div>
+          </div>
+          <div class="switch-item">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="cancellaDoppiSpazi" checked="true">
+              <label class="form-check-label" for="cancellaDoppiSpazi">cancella doppi spazi</label>
+            </div>
+          </div>
+          <div class="switch-item">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="chiusuraParentesiAutomatica" checked="true">
+              <label class="form-check-label" for="chiusuraParentesiAutomatica">chiusura parentesi automatica</label>
+            </div>
+          </div>
+        </div>
+        <div id="space_ordine" class="space d-none space-right" onclick="menu('ordine')" ></div>
+    
+    
+        <!--formattazione-->
+        <div id="menu_formattazione" class="menu menu-no menu-left">
+          <div class="row">
+            <div class="menu-icon-item arrow offset-6 col-3" onclick="menu('formattazione', 'impostazioni')">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-right menu-icon" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+              </svg>
+            </div>
+            <div class="menu-icon-item arrow col-3" onclick="menu('formattazione')" style="margin-left: 10px;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-x menu-icon" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </div>
+          </div>
+          <hr class="menu-hr">
+          <div class="impostazioni-item">
+            <h1>scegli la grandezza del carattere</h1>
+            <div class="row">
+              <div class="col-9">
+                <input type="range" id="chooseSize" value="15">
+              </div>
+              <p class="col-3" id="lblCarattere">15 px</p>
+            </div>
+          </div>
+          <hr class="menu-hr">
+          <div class="impostazioni-item">
+            <h1>scegli l'orientamento del testo</h1>
+              <div id="orientamento">            
+                <select class="form-select" onchange="orientamento(value)" aria-label="Default select example">
+                  <option value="left">sinistra</option>
+                  <option value="center">centrato</option>
+                  <option value="right">destra</option>
+                  <option value="justify">giustificato</option>
+                </select>
+              </div>  
+            </div>
+          </div>
+        <div id="space_formattazione" class="space d-none space-right" onclick="menu('formattazione')" ></div>
+    
+    
+        <!--generali-->
+        <div id="menu_generali" class="menu menu-no menu-left">
+          <div class="row">
+            <div class="menu-icon-item arrow offset-6 col-3" onclick="menu('generali', 'impostazioni')">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-arrow-right menu-icon" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+              </svg>
+            </div>
+            <div class="menu-icon-item arrow col-3" onclick="menu('generali')" style="margin-left: 10px;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-x menu-icon" viewBox="0 0 16 16">
+                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </div>
+          </div>
+          <hr class="menu-hr">
+          <div class="impostazioni-item">
+            <p>modifica la velocità di lettura</p>
+            <select class="form-select" id="velocitaLettura" aria-label="Default select example">
+              <option id="velNormale" value="1">normale</option>
+              <option id="velVeloce" value="2">veloce</option>
+              <option id="velLenta" value="0.5">lenta</option>
+            </select>
+          </div>
+          <div class="impostazioni-item">
+            <p>modifica la lingua di lettura</p>
+            <select class="form-select" id="linguaLettura" aria-label="Default select example">
+              <option id="ita" value="it-IT">Italiano</option>
+              <option id="eng" value="en-EN">Inglese</option>
+            </select>
+          </div>
+        </div>
+        <div id="space_generali" class="space d-none space-right" onclick="menu('generali')" ></div>
+
+
+        <!--fastMenu-->
+        <div>
+          <div class="fastmenu-caller" onclick="showFastmenu()">
+            <img src="src/img/min.svg" class="fastmenu-icon">
+          </div>
+        </div>
+        <div class="fastmenu fastmenu-no">
+          <div>
+            <div class="fastmenu-item" id="char_plus">
+              <div class="fastmenu-text non-selezionabile">
+                carattere +
+              </div>
+              <div class="fastmenu-icon">
+                <img src="src/img/text-plus.svg" class="fastmenu-icon">
+              </div>
+            </div>
+            <div class="fastmenu-item" id="char_minus">
+              <div class="fastmenu-text non-selezionabile ">
+                carattere -
+              </div>
+              <div class="fastmenu-icon">
+                <img src="src/img/text-minus.svg" class="fastmenu-icon">
+  
+              </div>
+            </div>
+
+            <div class="fastmenu-item" id="lightmode">
+              <div class="fastmenu-text non-selezionabile">
+                lightmode
+              </div>
+              <div class="fastmenu-icon">
+                <svg class="fastmenu-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-brightness-high" viewBox="0 0 16 16">
+                  <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                </svg>
+  
+              </div>
+            </div>
+            <div class="fastmenu-item" id="darkmode">
+              <div class="fastmenu-text non-selezionabile">
+                darkmode
+              </div>
+              <div class="fastmenu-icon">
+                <svg class="fastmenu-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-moon" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M14.53 10.53a7 7 0 0 1-9.058-9.058A7.003 7.003 0 0 0 8 15a7.002 7.002 0 0 0 6.53-4.47z"/>
+                </svg>
+  
+              </div>
+            </div>
+            
+          </div>
+        </div>
+    
+    
+    
+        <!--player audio-->
+        <div id="player" class="border-radius shadow padding-10 d-none">
+          <div class="layout margin-bottom-20 p_item" id="p_stop">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-stop-fill p_icon" viewBox="0 0 16 16">
+              <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"/>
+            </svg>
+          </div>
+          <div class="layout p_item" id="p_pause">
+            <svg xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-pause-fill p_icon" viewBox="0 0 16 16">
+              <path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/>
+            </svg>
+          </div>
+        </div>
+
+        <!--chiudi lista-->
+        <button class="bottom-right btn btn-warning invisible" id="btnChiudiList">Chiudi lista</button>
+
+
+        <!-- Rinomina -->
+<div class="modal fade" id="rinomina" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rinominaTitolo">Rinomina</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="txtrinomina" style="width: 100%;">
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="rinominaDef()" class="btn btn-dark" data-bs-dismiss="modal">Rinomina</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  
+
+<!--apri file-->
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="apriF" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Apri File</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input id="oFile" type="file">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fatto</button>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script>
+      window.$ = window.jquery = require("jquery")
+    </script>
+    <script>
+      const bootstrap = require('bootstrap')
+    </script>
+    <script src="node_modules/swiper/swiper-bundle.min.js"></script>
+    <script>
+      const {Swiper} = require('swiper');
+      var swiper;
+      newSwiper();
+      function newSwiper()
+      {
+        var swiper = new Swiper('.swiper-container', {
+      slidesPerView: 4,
+      centeredSlides: true,
+      spaceBetween: 30,
+      grabCursor: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      }
+      
+      
+    });
+      }
+    </script>  
+
+    <script src="src/js/class/class.js"></script>
+    <script src="src/js/documento.js"></script>
+
+  </body>
+</html>
