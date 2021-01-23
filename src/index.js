@@ -1,9 +1,32 @@
-const { app, BrowserWindow, Menu, dialog } = require('electron');
+const { app, BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const { valHooks } = require('jquery');
 const fs = require('fs');
 const path = require('path');
 const { exception } = require('console');
 
+
+ipcMain.on('get-file-data', function(event) {
+  var data = null
+  if (process.platform == 'win32' && process.argv.length >= 2) {
+    var openFilePath = process.argv[1]
+    data = openFilePath
+  }
+  let t = 1;
+  if(estensioni.includes(path.extname(data)))
+    t = 2;
+
+  let toSend = {
+    type : t,
+    url : data
+  }
+  event.returnValue = toSend;
+  /*toSend.type, legend
+  1 - apro un file normale con il blocco note
+  2 - apro un file che supporta la renderizzazione (contenuto nella lista estensioni)
+  */
+})
+
+const estensioni = ['.pdf', '.odt', '.odp', '.png', '.jpg', '.svg'];
 
 
 function createWindow () {
@@ -13,7 +36,8 @@ function createWindow () {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      enableRemoteModule : true
     }
   })
 
@@ -201,7 +225,7 @@ function apriFile(cont, win)
   let extension = path.extname(file);
 
   console.log(extension);
-  if(extension == '.pdf' || extension == '.odt' || extension == '.odp') //estensioni supportate da  viewerjs
+  if(estensioni.includes(extension)) //estensioni supportate
   {
     //apro il file in sola lettura con viewer js
     //chiedo se vuole farlo
@@ -238,6 +262,15 @@ function apriFile(cont, win)
         {
           //chromium apre i pdf in automatico
           newWin.loadFile(file);
+        }
+        else if(extension == '.png'|| extension == '.jpg'|| extension == '.svg')
+        {
+          //apro col visualizzatore di immagini
+          newWin.loadFile('src/openImage.html');
+          const content = newWin.webContents;
+          content.on('did-finish-load', ()=>{
+            content.executeJavaScript("setSrc('"+ file +"')");
+          })
         }
         else
         {

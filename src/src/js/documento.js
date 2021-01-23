@@ -807,7 +807,7 @@ function leggiFile(file) {
     var nome = file.split("\\")[file.split("\\").length - 1];
     aggiungiFile(fileCont, nome, true, file);
 }
-function risolivi(s) {
+function risolvi(s) {
     var split = s.split('\\');
     var n = "";
     for (var i = 0; i < split.length; i++) {
@@ -905,4 +905,74 @@ function darkmode() {
     setting.backgroundColor = back;
     setting.color = font;
     salvaSetting();
+}
+var ipcRenderer = require('electron').ipcRenderer;
+const { BrowserWindow } = require('electron').remote;
+var data = ipcRenderer.sendSync('get-file-data');
+if (data === null) {
+    console.log("There is no file");
+}
+else {
+    let type = data.type;
+    let url = data.url;
+    if(type == 1)
+    {
+        let file = fs.readFile(url, ['utf-8'], function (err, cont) {
+            if (err) {
+                return console.error('err');
+            }
+            aggiungiFile(cont, fs_getFileName(url), true, risolvi(url));
+        });
+    }
+    else if(type==2)
+    {
+        openSpeciaDocument(url);
+    }
+}
+function fs_getFileName(file) {
+    var files = file.split('\\');
+    var name = files[files.length - 1];
+    return name;
+}
+
+function openSpeciaDocument(url)
+{
+    let extension = path.extname(url);
+    let file = url;
+    file = risolvi(file);
+    //apro il documento con viewer js
+    let newWin = new BrowserWindow({
+        minWidth : 695,
+        minHeight : 300,
+        width: 800,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true,
+            webviewTag: true //Enable webviewTag
+        }
+    });
+
+    //newWin.webContents.toggleDevTools();
+    if(extension == '.pdf')
+    {
+    //chromium apre i pdf in automatico
+    newWin.loadFile(file);
+    }
+    else if(extension == '.png'|| extension == '.jpg'|| extension == '.svg')
+    {
+    //apro col visualizzatore di immagini
+    newWin.loadFile('src/openImage.html');
+    const content = newWin.webContents;
+    content.on('did-finish-load', ()=>{
+        content.executeJavaScript("setSrc('"+ file +"')");
+    })
+    }
+    else
+    {
+    newWin.loadFile('src/viewer.html');
+    const content = newWin.webContents;
+    content.on('did-finish-load', ()=>{
+        content.executeJavaScript("render('" + file + "')");
+    });
+    }
 }

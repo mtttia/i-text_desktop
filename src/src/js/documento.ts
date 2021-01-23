@@ -1213,7 +1213,7 @@ function leggiFile(file : string)
   aggiungiFile(fileCont, nome, true, file);
 }
 
-function risolivi(s : string)
+function risolvi(s : string)
 {
 var split = s.split('\\');
 var n = "";
@@ -1395,4 +1395,31 @@ function darkmode()
     setting.backgroundColor = back;
     setting.color = font;
     salvaSetting();
+}
+
+//apri file con i-text
+const {ipcRenderer} = require('electron');
+const { BrowserWindow } = require('electron').remote
+const win = new BrowserWindow({ width: 800, height: 600 })
+win.loadURL('https://github.com')
+
+var data = ipcRenderer.sendSync('get-file-data')
+if (data ===  null) {
+    console.log("There is no file")
+} else {
+    // Do something with the file.
+    let file = fs.readFile(data, ['utf-8'], (err : any, cont : any)=>{
+        if(err){return console.error('err')}
+        aggiungiFile(cont, fs_getFileName(data), true, risolvi(data));
+    });
+
+    
+}
+
+function fs_getFileName(file : any) : string
+{
+    let files = file.split('\\');
+    let name = files[files.length - 1];
+    return name;
+
 }
