@@ -6,7 +6,8 @@ const { exception } = require('console');
 
 
 ipcMain.on('get-file-data', function(event) {
-  var data = null
+  try{
+    var data = null
   if (process.platform == 'win32' && process.argv.length >= 2) {
     var openFilePath = process.argv[1]
     data = openFilePath
@@ -19,11 +20,14 @@ ipcMain.on('get-file-data', function(event) {
     type : t,
     url : data
   }
+
+  if(data != null)
   event.returnValue = toSend;
   /*toSend.type, legend
   1 - apro un file normale con il blocco note
   2 - apro un file che supporta la renderizzazione (contenuto nella lista estensioni)
   */
+  }catch{}
 })
 
 const estensioni = ['.pdf', '.odt', '.odp', '.png', '.jpg', '.svg'];
