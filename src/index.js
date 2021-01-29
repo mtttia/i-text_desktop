@@ -4,6 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const { exception } = require('console');
 
+if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
+  app.quit();
+}
 
 ipcMain.on('get-file-data', function(event) {
   try{
