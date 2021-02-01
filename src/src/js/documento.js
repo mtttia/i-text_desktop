@@ -199,6 +199,11 @@ $(document).ready(function () {
             $("#p_pause").html(playerPlay());
         }
     });
+    $('#sostituisci').click(function () {
+        var daSostituire = $('#daSostituire').val();
+        var sostituta = $('#sostituta').val();
+        replace(daSostituire, sostituta);
+    });
 });
 function leggi() {
     if (lettore.staLeggendo()) {
@@ -820,6 +825,27 @@ function risolvi(s) {
     }
     return n;
 }
+function callReplace() {
+    var replaceModal = new bootstrap.Modal(document.getElementById('replaceModal'), {
+        keyboard: false
+    });
+    replaceModal.show();
+}
+function replace(old, nuovo) {
+    var text = $('#text').val();
+    var v = text.split(old);
+    for (var i = 0; i < v.length; i++) {
+        if (i != v.length - 1) {
+            v[i] += nuovo;
+        }
+    }
+    console.log('old : ' + old + ', nuovo' + nuovo, + '\n' + 'replace : ' + v);
+    var toRet = "";
+    v.forEach(function (el) {
+        toRet += el;
+    });
+    $('#text').val(toRet);
+}
 var theText = document.getElementById('text');
 var fastmenuOpen = false;
 function showFastmenu() {
@@ -907,26 +933,24 @@ function darkmode() {
     salvaSetting();
 }
 var ipcRenderer = require('electron').ipcRenderer;
-const { BrowserWindow } = require('electron').remote;
+var BrowserWindow = require('electron').remote.BrowserWindow;
 var data = ipcRenderer.sendSync('get-file-data');
 if (data === null) {
     console.log("There is no file");
 }
 else {
-    let type = data.type;
-    let url = data.url;
-    if(type == 1)
-    {
-        let file = fs.readFile(url, ['utf-8'], function (err, cont) {
+    var type = data.type;
+    var url_1 = data.url;
+    if (type == 1) {
+        var file = fs.readFile(url_1, ['utf-8'], function (err, cont) {
             if (err) {
                 return console.error('err');
             }
-            aggiungiFile(cont, fs_getFileName(url), true, risolvi(url));
+            aggiungiFile(cont, fs_getFileName(url_1), true, risolvi(url_1));
         });
     }
-    else if(type==2)
-    {
-        openSpeciaDocument(url);
+    else if (type == 2) {
+        openSpeciaDocument(url_1);
     }
 }
 function fs_getFileName(file) {
@@ -934,45 +958,35 @@ function fs_getFileName(file) {
     var name = files[files.length - 1];
     return name;
 }
-
-function openSpeciaDocument(url)
-{
-    let extension = path.extname(url);
-    let file = url;
+function openSpeciaDocument(url) {
+    var extension = path.extname(url);
+    var file = url;
     file = risolvi(file);
-    //apro il documento con viewer js
-    let newWin = new BrowserWindow({
-        minWidth : 695,
-        minHeight : 300,
+    var newWin = new BrowserWindow({
+        minWidth: 695,
+        minHeight: 300,
         width: 800,
         height: 600,
         webPreferences: {
             nodeIntegration: true,
-            webviewTag: true //Enable webviewTag
+            webviewTag: true
         }
     });
-
-    //newWin.webContents.toggleDevTools();
-    if(extension == '.pdf')
-    {
-    //chromium apre i pdf in automatico
-    newWin.loadFile(file);
+    if (extension == '.pdf') {
+        newWin.loadFile(file);
     }
-    else if(extension == '.png'|| extension == '.jpg'|| extension == '.svg')
-    {
-    //apro col visualizzatore di immagini
-    newWin.loadFile('src/openImage.html');
-    const content = newWin.webContents;
-    content.on('did-finish-load', ()=>{
-        content.executeJavaScript("setSrc('"+ file +"')");
-    })
+    else if (extension == '.png' || extension == '.jpg' || extension == '.svg') {
+        newWin.loadFile('src/openImage.html');
+        var content_1 = newWin.webContents;
+        content_1.on('did-finish-load', function () {
+            content_1.executeJavaScript("setSrc('" + file + "')");
+        });
     }
-    else
-    {
-    newWin.loadFile('src/viewer.html');
-    const content = newWin.webContents;
-    content.on('did-finish-load', ()=>{
-        content.executeJavaScript("render('" + file + "')");
-    });
+    else {
+        newWin.loadFile('src/viewer.html');
+        var content_2 = newWin.webContents;
+        content_2.on('did-finish-load', function () {
+            content_2.executeJavaScript("render('" + file + "')");
+        });
     }
 }

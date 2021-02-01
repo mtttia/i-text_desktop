@@ -291,6 +291,13 @@ $(document).ready(() =>{
         }
     })
 
+    //tools
+    $('#sostituisci').click(()=>{
+        let daSostituire = <string> $('#daSostituire').val();
+        let sostituta = <string> $('#sostituta').val();
+        replace(daSostituire, sostituta);
+    })
+
 })
 
 function leggi(){
@@ -1228,6 +1235,37 @@ for(var i = 0; i < split.length; i++)
     }
 }
 return n;
+}
+
+function callReplace()
+{
+    var replaceModal = new bootstrap.Modal(document.getElementById('replaceModal'), {
+        keyboard: false
+    })
+
+    replaceModal.show();
+      
+}
+
+//====================================================================================================
+//TOOLS
+function replace(old : string, nuovo : string)
+{
+    let text = <string> $('#text').val();
+    let v = text.split(old);
+    for(let i = 0; i < v.length; i++)
+    {
+        if(i != v.length - 1)
+        {
+            v[i] += nuovo;
+        }
+    }
+
+    let toRet : string = "";
+    v.forEach(el =>{
+        toRet += el;
+    });
+    $('#text').val(toRet);
 }
 
 //====================================================================================================

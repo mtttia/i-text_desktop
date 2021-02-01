@@ -51,7 +51,7 @@ function createWindow () {
   const contents = win.webContents;
 
   win.loadFile('src/index.html');
-  //contents.toggleDevTools();
+  contents.toggleDevTools();
 
   var menu = Menu.buildFromTemplate([
     {
@@ -65,6 +65,7 @@ function createWindow () {
             eseguijs(contents, "nuovoFile('', true)");
           }
         },
+        { type: 'separator' },
         {
           label: "Apri file",
           accelerator : "CommandOrControl+O",
@@ -80,92 +81,34 @@ function createWindow () {
             apriCartella(contents);
           }
         },
+        { type: 'separator' },
         {
-          label : "Salva file",
+          label : "Salva",
           accelerator : "CommandOrControl+S",
           click(){
             salvaFile(contents);
           }
         },
         {
-          label: "salva tutti i file",
+          label: "Salva con Nome",
+          accelerator : "CommandOrControl+Shift+S",
+          click(){
+            salvaConNome(contents);
+          }
+        },
+        {
+          label: "Salva Tutto",
           accelerator : "CommandOrControl+Alt+S",
           click()
           {
             salvaTutti(contents);
           }
         },
-        {
-          label: "Salva con nome",
-          accelerator : "CommandOrControl+Shift+S",
-          click(){
-            salvaConNome(contents);
-          }
-        }
         
       ]
     },
     {
-      label : "ordina",
-      submenu : [
-        {
-          label : "ordina tutto",
-          accelerator : "CommandOrControl+Shift+O",
-          click()
-          {
-            //lo eseguo due volte perchè a volte alla prima non sistema tutto
-            eseguijs(contents, "formattaTutto()");
-            eseguijs(contents, "formattaTutto()");
-          }
-        }
-      ]
-    },
-    {
-      label: "impostazioni",
-      submenu : [
-        {
-          label : "ordine",
-          click()
-          {
-            eseguijs(contents, "menu('ordine')");
-          }
-        },
-        {
-          label : "formattazione",
-          click()
-          {
-            eseguijs(contents, "menu('formattazione')");
-          }
-        },
-        {
-          label : "lettura",
-          click()
-          {
-            eseguijs(contents, "menu('generali')");
-          }
-        }
-      ]
-    },
-    {
-      label : "leggi",
-      submenu : [
-        {
-          label : "leggi",
-          accelerator : "CommandOrControl+Alt+R",
-          click(){
-            eseguijs(contents, "leggi()");
-          }
-        },
-        {
-          label : "impostazioni",
-          click(){
-            eseguijs(contents, "menu('generali')");
-          }
-        }
-      ]
-    },
-    {
-      label: 'Edit',
+      label: 'Modifica',
       submenu: [
         { role: 'undo' },
         { role: 'redo' },
@@ -179,12 +122,65 @@ function createWindow () {
       ]
     },
     {
-      label: 'View',
+      label : "Ordinamento",
+      submenu : [
+        {
+          label : "Ordina Tutto",
+          accelerator : "CommandOrControl+Shift+O",
+          click()
+          {
+            //lo eseguo due volte perchè a volte alla prima non sistema tutto
+            eseguijs(contents, "formattaTutto()");
+            eseguijs(contents, "formattaTutto()");
+          }
+        },
+        { type: 'separator' },
+        {
+          label : "Opzioni",
+          click()
+          {
+            eseguijs(contents, "menu('ordine')");
+          }
+        }
+              ]
+    },
+    {
+      label : "Lettura",
+      submenu : [
+        {
+          label : "Leggi",
+          accelerator : "CommandOrControl+Alt+R",
+          click(){
+            eseguijs(contents, "leggi()");
+          }
+        },
+        { type: 'separator' },
+        {
+          label : "Opzioni",
+          click(){
+            eseguijs(contents, "menu('generali')");
+          }
+        }
+      ]
+    },
+    {
+      label: 'Codice',
       submenu: [
         { role: 'reload' },
         { role: 'forceReload' },
         { type: 'separator' },
         { role: 'togglefullscreen' }
+      ]
+    },
+    {
+      label: 'Tools',
+      submenu : [
+        {
+          label : 'trova e sostituisci',
+          click(){
+            eseguijs(contents, "callReplace()");
+          }
+        }
       ]
     }
 
