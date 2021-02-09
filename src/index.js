@@ -51,7 +51,7 @@ function createWindow () {
   const contents = win.webContents;
 
   win.loadFile('src/index.html');
-  contents.toggleDevTools();
+  //contents.toggleDevTools();
 
   var menu = Menu.buildFromTemplate([
     {

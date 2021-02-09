@@ -432,6 +432,7 @@ function UIaggiungiTesto(t : Testo)
    btn1.setAttribute("class", "btn btn-dark btn-no-bg padding-no");
    btn1.setAttribute("onclick", "cambiaTesto(" + t.getId() +")");
    btn1.setAttribute("id", "titolo" + t.getId());
+   btn1.setAttribute("style", "overflow-x: auto;");
    btn1.innerHTML = t.titolo;
    var cancella = document.createElement("button");
    cancella.innerHTML = xIcon();

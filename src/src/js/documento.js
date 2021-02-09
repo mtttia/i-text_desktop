@@ -291,6 +291,7 @@ function UIaggiungiTesto(t) {
     btn1.setAttribute("class", "btn btn-dark btn-no-bg padding-no");
     btn1.setAttribute("onclick", "cambiaTesto(" + t.getId() + ")");
     btn1.setAttribute("id", "titolo" + t.getId());
+    btn1.setAttribute("style", "overflow-x: auto;");
     btn1.innerHTML = t.titolo;
     var cancella = document.createElement("button");
     cancella.innerHTML = xIcon();
@@ -839,7 +840,6 @@ function replace(old, nuovo) {
             v[i] += nuovo;
         }
     }
-    console.log('old : ' + old + ', nuovo' + nuovo, + '\n' + 'replace : ' + v);
     var toRet = "";
     v.forEach(function (el) {
         toRet += el;

@@ -5,6 +5,10 @@ desktop app for interactive text, a superset notepad made with electron js
 you can download the app going to this page : https://github.com/mtttia/i-text_download
 then you have to follow the simple instructions
 
+# versione 2.1.0
+  - ordinato il menu
+  - aggiunto il tool "trova e sostituisci"
+
 # versione 2.0.0
 dopo la vesione 1.0.0, abbiamo deciso di rilasciare direttamente la versione 2.0.0 in quanto i migioramenti sono stati netti
   - l'ordinatore agisce subito, l'ordinazione del testo avviene in tempo reale (appena viene messa una virgola lo spazio compare subito)
