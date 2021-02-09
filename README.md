@@ -5,7 +5,7 @@ desktop app for interactive text, a superset notepad made with electron js
 you can download the app going to this page : https://github.com/mtttia/i-text_download
 then you have to follow the simple instructions
 
-# versione 2.1.0
+# versione 2.1.1
   - ordinato il menu
   - aggiunto il tool "trova e sostituisci"
 
