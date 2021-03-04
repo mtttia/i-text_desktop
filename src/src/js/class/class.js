@@ -1,5 +1,17 @@
-"use strict";
-var Lettore = (function () {
+/*
+classi che vengono utilizzate all'interno di questo progetto
+
+indice
+Lettore
+LetturaVeloce
+Libreria
+Sostituto
+Testo
+GestoreEventi
+Evento
+
+*/
+var Lettore = /** @class */ (function () {
     function Lettore() {
         this.isReading = false;
         this.inPausa = false;
@@ -56,7 +68,7 @@ var Lettore = (function () {
     };
     return Lettore;
 }());
-var LetturaVeloce = (function () {
+var LetturaVeloce = /** @class */ (function () {
     function LetturaVeloce(testo, id, timer) {
         this.testo = testo;
         this.idElemento = id;
@@ -88,6 +100,7 @@ var LetturaVeloce = (function () {
                 this.leggiParola(array);
             }
             else {
+                //continua
                 var id = this.idVecchio;
                 this.idVecchio = 0;
                 this.leggiParola(array, id);
@@ -99,6 +112,7 @@ var LetturaVeloce = (function () {
         if (i === void 0) { i = 0; }
         if (this.isPlaying) {
             if (i == array.length) {
+                //l'array è finito
                 this.cancella();
                 gestoreEventi.attiva("fineLetturaVeloce");
             }
@@ -125,15 +139,17 @@ var LetturaVeloce = (function () {
     };
     LetturaVeloce.prototype.inPausa = function () {
         if (this.idVecchio > 0) {
+            //è in pausa
             return true;
         }
         else {
+            //non è in pausa
             return false;
         }
     };
     return LetturaVeloce;
 }());
-var Libreria = (function () {
+var Libreria = /** @class */ (function () {
     function Libreria(testi) {
         if (testi != "") {
             this.testi = testi;
@@ -223,6 +239,7 @@ var Libreria = (function () {
                 console.error("testo non presente");
             }
             else {
+                //cancello il testo alla posizione pos
                 this.testi.splice(pos, 1);
             }
         }
@@ -262,7 +279,7 @@ var Libreria = (function () {
     };
     return Libreria;
 }());
-var Sostituto = (function () {
+var Sostituto = /** @class */ (function () {
     function Sostituto(sub, sos) {
         this.substring = sub;
         this.sostitute = sos;
@@ -293,7 +310,7 @@ var Sostituto = (function () {
     };
     return Sostituto;
 }());
-var Testo = (function () {
+var Testo = /** @class */ (function () {
     function Testo(titolo, text, idElement, id, path) {
         if (path === void 0) { path = ""; }
         this.text = text;
@@ -301,6 +318,7 @@ var Testo = (function () {
         this.id = id;
         this.titolo = titolo;
         if (path != "") {
+            //c'è un path
             this.file = true;
             this.pathFile = path;
         }
@@ -309,6 +327,7 @@ var Testo = (function () {
             this.pathFile = "";
         }
     }
+    //metodi
     Testo.prototype.getText = function () {
         return this.text;
     };
@@ -364,7 +383,7 @@ var Testo = (function () {
     };
     return Testo;
 }());
-var GestoreEventi = (function () {
+var GestoreEventi = /** @class */ (function () {
     function GestoreEventi() {
         this.eventi = new Array();
     }
@@ -380,7 +399,7 @@ var GestoreEventi = (function () {
     };
     return GestoreEventi;
 }());
-var Evento = (function () {
+var Evento = /** @class */ (function () {
     function Evento(nome, callback) {
         this.nome = nome;
         this.callback = callback;
