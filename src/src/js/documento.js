@@ -153,6 +153,10 @@ $(document).ready(function () {
             $("#play").html("<p class='non-selezionabile'>" + getStopIcon(true) + " stop" + "</p>");
         }
     });
+    $(".detta").click(function () {
+        console.log("detta");
+        runSpeechRecognition();
+    });
     $("#btnSpeed").click(function () {
         if ($("#lblSpeed").val() > 99) {
             $("#alert-cambio-velocita").toggleClass("d-none");
@@ -831,6 +835,23 @@ function callReplace() {
         keyboard: false
     });
     replaceModal.show();
+}
+function runSpeechRecognition() {
+    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+    var recognition = new SpeechRecognition();
+    recognition.onstart = function () {
+        console.log("start");
+    };
+    recognition.onspeechend = function () {
+        recognition.stop();
+    };
+    recognition.onresult = function (event) {
+        var transcript = event.results[0][0].transcript;
+        var confidence = event.results[0][0].confidence;
+        console.log(transcript);
+        document.getElementById("text").innerHTML += transcript;
+    };
+    recognition.start();
 }
 function replace(old, nuovo) {
     var text = $('#text').val();

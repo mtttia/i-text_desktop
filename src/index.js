@@ -12,8 +12,9 @@ ipcMain.on('get-file-data', function(event) {
   try{
     var data = null
   if (process.platform == 'win32' && process.argv.length >= 2) {
-    var openFilePath = process.argv[1]
-    data = openFilePath
+    var openFilePath = process.argv[1];
+    data = openFilePath;
+    console.log("data : " + data);
   }
   let t = 1;
   if(estensioni.includes(path.extname(data)))
@@ -24,7 +25,7 @@ ipcMain.on('get-file-data', function(event) {
     url : data
   }
 
-  if(data != null)
+  if(data != null && data != '.')
   event.returnValue = toSend;
   /*toSend.type, legend
   1 - apro un file normale con il blocco note
@@ -188,6 +189,7 @@ function createWindow () {
 
   Menu.setApplicationMenu(menu);
   //win.removeMenu();
+  
 
 }
 
