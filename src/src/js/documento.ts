@@ -1252,34 +1252,6 @@ function callReplace()
     replaceModal.show();
       
 }
-//====================================================================================================
-//SPEECH TO TEXT
-function runSpeechRecognition() {
-    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-    //var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-    var recognition = new SpeechRecognition();
-
-    // This runs when the speech recognition service starts
-    
-    recognition.onstart = function() {
-        console.log("start");
-    };
-    
-    recognition.onspeechend = function() {
-        recognition.stop();
-    }
-  
-    // This runs when the speech recognition service returns result
-    recognition.onresult = function(event) {
-        var transcript = event.results[0][0].transcript;
-        var confidence = event.results[0][0].confidence;
-        console.log(transcript);
-        document.getElementById("text").innerHTML+= transcript;
-    };
-  
-     // start recognition
-     recognition.start();
-}
 
 //====================================================================================================
 //TOOLS

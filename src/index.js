@@ -25,7 +25,7 @@ ipcMain.on('get-file-data', function(event) {
     url : data
   }
 
-  if(data != null && data != '.')
+  if(data != null && data != undefined && toSend.type != 1 && data != '.')
   event.returnValue = toSend;
   /*toSend.type, legend
   1 - apro un file normale con il blocco note

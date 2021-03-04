@@ -348,7 +348,7 @@ border-radius: 10px;
     height: 59px;
     border-right: 1px solid #000000;
     padding: 14px;
-    padding-top: 17px;
+    padding-top: 12px;
     padding-right: 10px;
     font-size: 19px;
     color: #ffffff;
@@ -358,11 +358,13 @@ border-radius: 10px;
     z-index: 2;
     position: absolute; top: 0px; right: 0px;
     border-radius: 5px;
+    transition: all 0.2s ease;
 }
 
 .fastmenu-caller:hover
 {
-    background-color: #ffffff54;    
+    backdrop-filter: blur( 11.0px );
+    -webkit-backdrop-filter: blur( 11.0px );
 }
 
 .fastmenu-item

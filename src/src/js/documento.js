@@ -837,21 +837,15 @@ function callReplace() {
     replaceModal.show();
 }
 function runSpeechRecognition() {
-    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
-    var recognition = new SpeechRecognition();
-    recognition.onstart = function () {
-        console.log("start");
-    };
-    recognition.onspeechend = function () {
-        recognition.stop();
-    };
-    recognition.onresult = function (event) {
-        var transcript = event.results[0][0].transcript;
-        var confidence = event.results[0][0].confidence;
-        console.log(transcript);
-        document.getElementById("text").innerHTML += transcript;
-    };
-    recognition.start();
+    var Speech = require('electron-speech');
+    var recog = Speech({
+        lang: 'it-IT',
+        continuous: true
+    });
+    recog.on('text', function (text) {
+        console.log(text);
+    });
+    recog.listen();
 }
 function replace(old, nuovo) {
     var text = $('#text').val();
@@ -956,7 +950,7 @@ function darkmode() {
 var ipcRenderer = require('electron').ipcRenderer;
 var BrowserWindow = require('electron').remote.BrowserWindow;
 var data = ipcRenderer.sendSync('get-file-data');
-if (data === null) {
+if (data === null || data === undefined || data.type == 1) {
     console.log("There is no file");
 }
 else {
